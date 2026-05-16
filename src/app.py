@@ -10,7 +10,7 @@ import os
 
 logger = setup_logger()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'ict932-secret-key-change-in-production'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'ict932-secret-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///secureapp.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -85,4 +85,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         logger.info("Secure app started")
-    app.run(debug=True)
+    app.run(debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true')
