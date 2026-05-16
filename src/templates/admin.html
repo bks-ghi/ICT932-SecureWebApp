@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SecureWebApp</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; background: #f0f2f5; }
+        nav { background: #0c4e54; color: white; padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        nav strong { font-size: 1.1rem; }
+        nav a { color: white; text-decoration: none; margin-left: 1.5rem; }
+        nav a:hover { text-decoration: underline; }
+        .container { max-width: 960px; margin: 2rem auto; padding: 0 1rem; }
+        .card { background: white; border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        h2 { margin-bottom: 1.5rem; color: #1a1a1a; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.95rem; }
+        th { background: #f8f8f8; font-weight: 600; color: #333; }
+        tr:hover { background: #fafafa; }
+        .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-admin { background: #cedcd8; color: #01696f; }
+        .badge-user { background: #f0f0f0; color: #555; }
+        .warning { background: #fff8e1; border: 1px solid #ffe082; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem; color: #7a5c00; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+<nav>
+    <strong>🔐 Admin Panel</strong>
+    <div>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+<div class="container">
+    <div class="card">
+        <h2>👥 All Registered Users</h2>
+        <div class="warning">⚠️ This page is restricted to Admin role only (RBAC enforced).</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>2FA</th>
+                    <th>Joined</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in users %}
+                <tr>
+                    <td>{{ u.id }}</td>
+                    <td>{{ u.username }}</td>
+                    <td>{{ u.email }}</td>
+                    <td><span class="badge badge-{{ u.role }}">{{ u.role }}</span></td>
+                    <td>{{ '✅' if u.is_2fa_enabled else '❌' }}</td>
+                    <td>{{ u.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
