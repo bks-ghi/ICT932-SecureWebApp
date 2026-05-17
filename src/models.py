@@ -39,3 +39,52 @@ class User(UserMixin, db.Model):
         return pyotp.TOTP(self.totp_secret).provisioning_uri(
             self.email, issuer_name='SecureWebApp'
         )
+    
+   # ── Project 9: Student Management Models ──────────────────────────────────
+from datetime import datetime
+
+class Student(db.Model):
+    __tablename__ = 'students'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.String(20), unique=True, nullable=False)
+    full_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    phone = db.Column(db.String(20))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    enrollments = db.relationship('Enrollment', backref='student', lazy=True)
+    grades = db.relationship('Grade', backref='student', lazy=True)
+    attendances = db.relationship('Attendance', backref='student', lazy=True)
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer, primary_key=True)
+    course_code = db.Column(db.String(20), unique=True, nullable=False)
+    course_name = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text)
+    enrollments = db.relationship('Enrollment', backref='course', lazy=True)
+    grades = db.relationship('Grade', backref='course', lazy=True)
+    attendances = db.relationship('Attendance', backref='course', lazy=True)
+
+class Enrollment(db.Model):
+    __tablename__ = 'enrollments'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    enrolled_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Grade(db.Model):
+    __tablename__ = 'grades'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    grade = db.Column(db.String(5), nullable=False)
+    remarks = db.Column(db.String(200))
+    recorded_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Attendance(db.Model):
+    __tablename__ = 'attendance'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('students.id'), nullable=False)
+    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    status = db.Column(db.String(10), nullable=False, default='Present')
