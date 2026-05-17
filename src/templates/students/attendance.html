@@ -1,0 +1,60 @@
+{% extends "dashboard.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>📅 Attendance Tracking</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    <form method="POST" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <select name="student_id" class="form-select" required>
+                <option value="">-- Select Student --</option>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.full_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="course_id" class="form-select" required>
+                <option value="">-- Select Course --</option>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.course_code }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select name="status" class="form-select">
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Mark</button>
+        </div>
+    </form>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr><th>Student</th><th>Course</th><th>Date</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            {% for a in attendance %}
+            <tr>
+                <td>{{ a.student.full_name }}</td>
+                <td>{{ a.course.course_code }}</td>
+                <td>{{ a.date }}</td>
+                <td>
+                    <span class="badge bg-{{ 'success' if a.status == 'Present' else 'danger' if a.status == 'Absent' else 'warning' }}">
+                        {{ a.status }}
+                    </span>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4" class="text-center">No attendance records yet.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

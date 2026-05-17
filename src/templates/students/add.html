@@ -1,0 +1,31 @@
+{% extends "dashboard.html" %}
+{% block content %}
+<div class="container mt-4" style="max-width:600px">
+    <h2>➕ Add New Student</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    <form method="POST">
+        <div class="mb-3">
+            <label class="form-label">Student ID *</label>
+            <input type="text" name="student_id" class="form-control" required placeholder="e.g. S001" maxlength="20">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Full Name *</label>
+            <input type="text" name="full_name" class="form-control" required placeholder="e.g. John Smith" maxlength="100">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email *</label>
+            <input type="email" name="email" class="form-control" required placeholder="e.g. john@example.com">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Phone</label>
+            <input type="text" name="phone" class="form-control" placeholder="e.g. 0412345678" maxlength="20">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Student</button>
+        <a href="{{ url_for('students.list_students') }}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+{% endblock %}
