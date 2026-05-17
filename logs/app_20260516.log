@@ -1,0 +1,29 @@
+[2026-05-16 14:29:27] INFO - Secure app started
+[2026-05-16 14:29:30] INFO - Secure app started
+[2026-05-16 14:32:03] INFO - New user registered: testuser
+[2026-05-16 14:32:21] INFO - Password OK for testuser, redirecting to 2FA
+[2026-05-16 14:40:48] INFO - 2FA verified for testuser
+[2026-05-16 14:42:11] INFO - Secure app started
+[2026-05-16 15:03:12] INFO - Secure app started
+[2026-05-16 15:05:44] INFO - Secure app started
+[2026-05-16 15:05:46] INFO - Secure app started
+[2026-05-16 15:13:27] INFO - Secure app started
+[2026-05-16 15:13:50] INFO - Secure app started
+[2026-05-16 15:34:07] WARNING - Failed login attempt for username: ZAP
+[2026-05-16 15:34:08] INFO - New user registered: ZAP
+[2026-05-17 15:31:59] WARNING - Failed login attempt for username: user
+[2026-05-17 15:32:30] INFO - New user registered: BIKESH
+[2026-05-17 15:32:46] INFO - Password OK for BIKESH, redirecting to 2FA
+[2026-05-17 15:33:15] WARNING - Failed 2FA attempt for user: BIKESH
+[2026-05-17 15:44:05] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:45:24] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:45:31] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:46:57] INFO - User testuser logged out
+[2026-05-17 15:47:10] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:49:57] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:50:30] WARNING - Failed login attempt for username: testuser
+[2026-05-17 15:51:09] INFO - New user registered: admin
+[2026-05-17 15:51:38] INFO - Password OK for admin, redirecting to 2FA
+[2026-05-17 15:56:09] INFO - 2FA verified for admin
+[2026-05-17 16:10:54] INFO - Password OK for admin, redirecting to 2FA
+[2026-05-17 16:11:11] INFO - 2FA verified for admin
