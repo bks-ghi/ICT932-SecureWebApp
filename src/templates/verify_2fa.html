@@ -3,34 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2FA Verification - SecureWebApp</title>
-    <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; background: #f0f2f5; }
-        .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.1); width: 100%; max-width: 380px; }
-        h2 { margin-bottom: 0.5rem; color: #1a1a1a; }
-        p { color: #666; margin-bottom: 1.5rem; font-size: 0.95rem; }
-        input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1.5rem; box-sizing: border-box; letter-spacing: 0.5em; text-align: center; }
-        button { width: 100%; padding: 0.75rem; background: #01696f; color: white; border: none; border-radius: 4px; font-size: 1rem; cursor: pointer; }
-        button:hover { background: #0c4e54; }
-        .alert-error { padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem; background: #fce4e4; color: #c0392b; }
-        .link { text-align: center; margin-top: 1rem; }
-        a { color: #01696f; }
-    </style>
+    <title>Two-Factor Authentication - SecureWebApp</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
-<body>
-    <div class="card">
-        <h2>🔑 Two-Factor Auth</h2>
-        <p>Enter the 6-digit code from your Google Authenticator app.</p>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% for cat, msg in messages %}
-            <div class="alert-{{ cat }}">{{ msg }}</div>
-          {% endfor %}
-        {% endwith %}
-        <form method="POST">
-            <input type="text" name="token" placeholder="000000" maxlength="6" required autofocus>
-            <button type="submit">Verify</button>
-        </form>
-        <div class="link"><a href="/login">← Back to Login</a></div>
-    </div>
+
+<body class="auth-page">
+
+<div class="auth-card">
+
+    <h1>🔐 Two-Factor Authentication</h1>
+    <p class="auth-subtitle">
+        Enter the 6-digit code from your Google Authenticator app
+    </p>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="flash-message">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Authentication Code</label>
+
+            <input
+                type="text"
+                name="token"
+                placeholder="000000"
+                maxlength="6"
+                required
+            >
+        </div>
+
+        <button type="submit" class="btn-primary">
+            Verify
+        </button>
+
+    </form>
+
+    <p class="auth-link">
+        <a href="/login">← Back to Login</a>
+    </p>
+
+</div>
+
 </body>
 </html>

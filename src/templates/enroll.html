@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enroll Students - SecureWebApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-logo">🔒 SecureWebApp</div>
+
+    <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/students">👨‍🎓 Students</a>
+        <a href="/courses">📚 Courses</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="form-card">
+
+        <h1>📋 Student Enrollment</h1>
+
+        <form method="POST">
+
+            <label>Select Student</label>
+            <select name="student_id" required>
+                {% for student in students %}
+                <option value="{{ student.id }}">{{ student.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Select Course</label>
+            <select name="course_id" required>
+                {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">
+                Enroll Student
+            </button>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>
