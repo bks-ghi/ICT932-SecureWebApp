@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Student - SecureWebApp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-logo">SecureWebApp</div>
+
+    <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/students">Students</a>
+        <a href="/courses">Courses</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+
+    <div class="form-card">
+        <h1>Add Student</h1>
+
+        <form method="POST">
+
+            <label>Student ID</label>
+            <input type="text" name="student_id" required placeholder="e.g. CIHE240926">
+
+            <label>Full Name</label>
+            <input type="text" name="full_name" required placeholder="e.g. Bikesh Ghimire">
+
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="e.g. student@email.com">
+
+            <label>Phone</label>
+            <input type="text" name="phone" placeholder="e.g. 0400000000">
+
+            <button type="submit" class="btn">Add Student</button>
+
+            <a href="/students" class="back-link">
+                Back to Students
+            </a>
+
+        </form>
+    </div>
+
+</main>
+
+</body>
+</html>

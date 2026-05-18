@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,77 +11,83 @@
 
 <body>
 
-<nav class="navbar">
+    <nav class="navbar">
 
-    <div class="nav-logo">
-        🔒 SecureWebApp
-    </div>
+        <div class="nav-logo">
+            🔒 SecureWebApp
+        </div>
 
-    <div class="nav-links">
-        <a href="/dashboard">Dashboard</a>
-        <a href="/courses">📚 Courses</a>
-        <a href="/enroll">📋 Enroll</a>
-        <a href="/grades">📝 Grades</a>
-        <a href="/attendance">📅 Attendance</a>
-        <a href="/admin">👥 Admin Panel</a>
-        <a href="/audit-logs">🔍 Audit Logs</a>
-        <a href="/logout">Logout</a>
-    </div>
+        <div class="nav-links">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/courses">📚 Courses</a>
+            <a href="/enroll">📋 Enroll</a>
+            <a href="/grades">📝 Grades</a>
+            <a href="/attendance">📅 Attendance</a>
+            <a href="/admin">👥 Admin Panel</a>
+            <a href="/audit-logs">🔍 Audit Logs</a>
+            <a href="/logout">Logout</a>
+        </div>
 
-</nav>
+    </nav>
 
-<main class="container">
+    <main class="container">
 
-    <div class="page-header">
-        <h1>👨‍🎓 All Students</h1>
+        <div class="page-header">
 
-        <a href="/add-student" class="btn">
-            + Add Student
-        </a>
-    </div>
+            <h1>👨‍🎓 All Students</h1>
 
-    <div class="table-card">
+            <a href="/students/add" class="btn">
+                + Add Student
+            </a>
 
-        <table>
+        </div>
 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Student ID</th>
-                    <th>Full Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Enrolled</th>
-                </tr>
-            </thead>
+        <div class="table-card">
 
-            <tbody>
+            <table>
 
-                {% for student in students %}
-                <tr>
-                    <td>{{ student.id }}</td>
-                    <td>{{ student.student_id }}</td>
-                    <td>{{ student.full_name }}</td>
-                    <td>{{ student.email }}</td>
-                    <td>{{ student.phone }}</td>
-                    <td>{{ student.enrolled_date }}</td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Enrolled</th>
+                    </tr>
+                </thead>
 
-                {% else %}
+                <tbody>
 
-                <tr>
-                    <td colspan="6">No students yet.</td>
-                </tr>
+                    {% for student in students %}
 
-                {% endfor %}
+                    <tr>
+                        <td>{{ student.id }}</td>
+                        <td>{{ student.student_id }}</td>
+                        <td>{{ student.full_name }}</td>
+                        <td>{{ student.email }}</td>
+                        <td>{{ student.phone }}</td>
+                        <td>{{ student.enrolled_date }}</td>
+                    </tr>
 
-            </tbody>
+                    {% else %}
 
-        </table>
+                    <tr>
+                        <td colspan="6">
+                            No students yet.
+                        </td>
+                    </tr>
 
-    </div>
+                    {% endfor %}
 
-</main>
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
 
 </body>
+
 </html>

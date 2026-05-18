@@ -14,7 +14,7 @@ def list_students():
     logger.info(f"User {current_user.username} viewed student list")
     return render_template('students/list.html', students=students)
 
-@students_bp.route('/students/add', methods=['GET', 'POST'])
+@students_bp.route('/add-student', methods=['GET', 'POST'])
 @login_required
 def add_student():
     if current_user.role != 'admin':
