@@ -22,6 +22,17 @@ app.config['SECRET_KEY'] = os.environ.get(
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///secureapp.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# -------------------------------------------------
+# Secure Cookie Configuration - ZAP Remediation
+# -------------------------------------------------
+
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+# Keep False for localhost HTTP testing.
+# In real HTTPS production, change this to True.
+app.config['SESSION_COOKIE_SECURE'] = False
+
 db.init_app(app)
 
 limiter = Limiter(
@@ -127,15 +138,31 @@ def log_action(action):
 
 
 # -------------------------------------------------
-# Security Headers
+# Security Headers - ZAP Remediation
 # -------------------------------------------------
 
 @app.after_request
 def add_security_headers(response):
-    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Content-Security-Policy'] = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline'; "
+        "img-src 'self' data:; "
+        "font-src 'self'; "
+        "frame-ancestors 'none'; "
+        "base-uri 'self'; "
+        "form-action 'self'"
+    )
+
     response.headers['X-Frame-Options'] = 'DENY'
-    response.headers['Content-Security-Policy'] = "default-src 'self' data:;"
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'geolocation=(), microphone=(), camera=()'
+
+    # Older browser protection. Modern browsers mainly rely on CSP,
+    # but this is fine for assignment evidence.
     response.headers['X-XSS-Protection'] = '1; mode=block'
+
     return response
 
 
@@ -175,7 +202,7 @@ def setup_2fa(user_id):
 
     otp_uri = pyotp.totp.TOTP(user.totp_secret).provisioning_uri(
         name=user.email,
-        issuer_name="SecureWebApp"
+        issuer_name="Secure Student Management System"
     )
 
     qr = qrcode.make(otp_uri)
