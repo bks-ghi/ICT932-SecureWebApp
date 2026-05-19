@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Grades - SecureWebApp</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo">🔒 SecureWebApp</div>
+
+    <div class="nav-logo">
+        🔒 SecureWebApp
+    </div>
 
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
-        <a href="/students">👨‍🎓 Students</a>
         <a href="/courses">📚 Courses</a>
+        <a href="/grades">📝 Grades</a>
+        <a href="/attendance">📅 Attendance</a>
+
+        {% if current_user.role in ['admin', 'teacher'] %}
+            <a href="/students">👨‍🎓 Students</a>
+            <a href="/enroll">📋 Enroll</a>
+        {% endif %}
+
+        {% if current_user.role == 'admin' %}
+            <a href="/admin">👥 Admin Panel</a>
+            <a href="/audit-logs">🔍 Audit Logs</a>
+        {% endif %}
+
         <a href="/logout">Logout</a>
     </div>
+
 </nav>
 
 <main class="container">
@@ -25,30 +43,154 @@
         <h1>📝 Grades</h1>
     </div>
 
+    {% if current_user.role in ['admin', 'teacher'] %}
+
+    <div class="form-card">
+
+        <h2>Record Student Grade</h2>
+
+        <form method="POST" action="/grades">
+
+            <label>Select Student</label>
+            <select name="student_id" required>
+                <option value="">-- Select Student --</option>
+
+                {% for student in students %}
+                    <option value="{{ student.id }}">
+                        {{ student.full_name }} - {{ student.student_id }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Select Course</label>
+            <select name="course_id" required>
+                <option value="">-- Select Course --</option>
+
+                {% for course in courses %}
+                    <option value="{{ course.id }}">
+                        {{ course.course_code }} - {{ course.course_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Grade</label>
+            <input type="text" name="grade" placeholder="e.g. HD, D, C, P, F or 85%" required>
+
+            <label>Remarks</label>
+            <textarea name="remarks" rows="3" placeholder="Optional remarks"></textarea>
+
+            <button type="submit" class="btn">
+                Save Grade
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
     <div class="table-card">
 
         <table>
+
             <thead>
                 <tr>
                     <th>Student</th>
                     <th>Course</th>
                     <th>Grade</th>
+                    <th>Remarks</th>
+
+                    {% if current_user.role in ['admin', 'teacher'] %}
+                        <th>Modify</th>
+                        <th>Delete</th>
+                    {% endif %}
                 </tr>
             </thead>
 
             <tbody>
+
                 {% for grade in grades %}
+
                 <tr>
-                    <td>{{ grade.student }}</td>
-                    <td>{{ grade.course }}</td>
-                    <td>{{ grade.grade }}</td>
+
+                    <td>
+                        {{ grade.student.full_name if grade.student else 'Unknown Student' }}
+                    </td>
+
+                    <td>
+                        {{ grade.course.course_name if grade.course else 'Unknown Course' }}
+                    </td>
+
+                    <td>
+                        {{ grade.grade }}
+                    </td>
+
+                    <td>
+                        {{ grade.remarks }}
+                    </td>
+
+                    {% if current_user.role in ['admin', 'teacher'] %}
+
+                    <td>
+
+                        <form method="POST" action="/grades/update/{{ grade.id }}">
+
+                            <input
+                                type="text"
+                                name="grade"
+                                value="{{ grade.grade }}"
+                                required
+                                style="width:80px;"
+                            >
+
+                            <input
+                                type="text"
+                                name="remarks"
+                                value="{{ grade.remarks }}"
+                                placeholder="Remarks"
+                                style="width:140px;"
+                            >
+
+                            <button type="submit" class="btn">
+                                Update
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                    <td>
+
+                        <form method="POST"
+                              action="/grades/delete/{{ grade.id }}"
+                              onsubmit="return confirm('Are you sure you want to delete this grade?');">
+
+                            <button type="submit" class="btn-danger">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                    {% endif %}
+
                 </tr>
+
                 {% else %}
+
                 <tr>
-                    <td colspan="3">No grades recorded.</td>
+                    {% if current_user.role in ['admin', 'teacher'] %}
+                        <td colspan="6">No grades recorded.</td>
+                    {% else %}
+                        <td colspan="4">No grades recorded.</td>
+                    {% endif %}
                 </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
 
     </div>
@@ -56,4 +198,5 @@
 </main>
 
 </body>
+
 </html>

@@ -2,69 +2,256 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SecureWebApp</title>
-
-    <!-- External CSS file -->
+    <title>Dashboard - Secure Student Management System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo">
-        🔒 SecureWebApp
-    </div>
+    <div class="nav-logo">🔐 Secure Student Management System</div>
 
     <div class="nav-links">
-        <a href="/students">👨‍🎓 Students</a>
+        <a href="/dashboard">🏠 Dashboard</a>
         <a href="/courses">📚 Courses</a>
-        <a href="/enroll">📋 Enroll</a>
-        <a href="/grades">📝 Grades</a>
-        <a href="/attendance">📅 Attendance</a>
+
+        {% if current_user.role in ['admin', 'teacher'] %}
+            <a href="/students">👨‍🎓 Students</a>
+            <a href="/enroll">📋 Enroll</a>
+            <a href="/grades">📝 Grades</a>
+            <a href="/attendance">📅 Attendance</a>
+        {% endif %}
+
+        {% if current_user.role == 'student' %}
+            <a href="/grades">📝 My Grades</a>
+            <a href="/attendance">📅 My Attendance</a>
+        {% endif %}
 
         {% if current_user.role == 'admin' %}
-        <a href="/admin">Admin Panel</a>
-        <a href="/audit-logs">🔍 Audit Logs</a>
+            <a href="/admin">👥 Admin Panel</a>
+            <a href="/audit-logs">🔍 Audit Logs</a>
         {% endif %}
 
         <a href="/logout">Logout</a>
     </div>
 </nav>
 
-<main class="container">
+<main class="dashboard-container">
 
-    <section class="card">
-        <h1>Welcome, {{ user.username }}! 👋</h1>
+    <!-- Hero Banner -->
+    <section class="dashboard-hero">
 
-        <div class="info-row">
-            <strong>Role:</strong>
-            <span class="badge badge-{{ user.role }}">{{ user.role }}</span>
+        <div class="hero-left">
+            {% if current_user.role == 'admin' %}
+                <p class="role-label">Administrator Dashboard</p>
+                <h1>Welcome back, {{ current_user.username }} 👋</h1>
+                <p>
+                    You have full control to manage users, students, courses,
+                    enrolments, grades, attendance, and audit logs.
+                </p>
+
+            {% elif current_user.role == 'teacher' %}
+                <p class="role-label">Teacher Dashboard</p>
+                <h1>Welcome, {{ current_user.username }} 👋</h1>
+                <p>
+                    You can manage students, enrol them into courses,
+                    record grades, and update attendance.
+                </p>
+
+            {% else %}
+                <p class="role-label">Student Dashboard</p>
+                <h1>Welcome, {{ current_user.username }} 👋</h1>
+                <p>
+                    You can view available courses, check your own grades,
+                    and view your attendance records securely.
+                </p>
+            {% endif %}
         </div>
 
-        <div class="info-row">
-            <strong>Email:</strong> {{ user.email }}
+        <div class="hero-right">
+            <div class="hero-badge">
+                <span>🔐</span>
+                <strong>RBAC Active</strong>
+                <small>Your access is controlled by your role</small>
+            </div>
         </div>
 
-        <div class="info-row">
-            <strong>Account created:</strong> {{ user.created_at }}
-        </div>
-
-        <div class="info-row">
-            <strong>2FA:</strong>
-            {{ '✅ Enabled' if user.is_2fa_enabled else '❌ Disabled' }}
-        </div>
     </section>
 
-    <section class="card">
-        <h2>🛡️ Security Status</h2>
+    <!-- Account Summary -->
+    <section class="dashboard-grid">
 
-        <div class="security-item">✅ Password hashed with bcrypt</div>
-        <div class="security-item">✅ Role-Based Access Control (RBAC) active</div>
-        <div class="security-item">✅ Session management active</div>
-        <div class="security-item">
-            {{ '✅ Two-Factor Authentication enabled' if user.is_2fa_enabled else '⚠️ Two-Factor Authentication disabled' }}
+        <div class="dashboard-card">
+            <h2>👤 Account Details</h2>
+
+            <div class="info-row">
+                <strong>Username:</strong>
+                <span>{{ current_user.username }}</span>
+            </div>
+
+            <div class="info-row">
+                <strong>Email:</strong>
+                <span>{{ current_user.email }}</span>
+            </div>
+
+            <div class="info-row">
+                <strong>Role:</strong>
+                <span class="role-pill">{{ current_user.role }}</span>
+            </div>
+
+            <div class="info-row">
+                <strong>2FA Status:</strong>
+                <span>{{ '✅ Enabled' if current_user.is_2fa_enabled else '❌ Disabled' }}</span>
+            </div>
         </div>
+
+        <div class="dashboard-card">
+            <h2>🛡️ Security Status</h2>
+
+            <ul class="security-list">
+                <li>✅ Secure login enabled</li>
+                <li>✅ Password hashing active</li>
+                <li>✅ Two-Factor Authentication enabled</li>
+                <li>✅ Role-Based Access Control active</li>
+                <li>✅ Session management active</li>
+                <li>✅ Audit logging enabled</li>
+            </ul>
+        </div>
+
+    </section>
+
+    <!-- Role Based Quick Actions -->
+    <section class="dashboard-card full-width-card">
+
+        <h2>🚀 Quick Actions</h2>
+
+        <div class="action-grid">
+
+            {% if current_user.role == 'admin' %}
+
+                <a href="/admin" class="action-card">
+                    <span>👥</span>
+                    <strong>Manage Users</strong>
+                    <small>Change roles and delete users</small>
+                </a>
+
+                <a href="/students" class="action-card">
+                    <span>👨‍🎓</span>
+                    <strong>Manage Students</strong>
+                    <small>Add, edit, and delete students</small>
+                </a>
+
+                <a href="/courses" class="action-card">
+                    <span>📚</span>
+                    <strong>Manage Courses</strong>
+                    <small>Add and view courses</small>
+                </a>
+
+                <a href="/enroll" class="action-card">
+                    <span>📋</span>
+                    <strong>Enroll Students</strong>
+                    <small>Assign students to courses</small>
+                </a>
+
+                <a href="/grades" class="action-card">
+                    <span>📝</span>
+                    <strong>Record Grades</strong>
+                    <small>Add or update student grades</small>
+                </a>
+
+                <a href="/attendance" class="action-card">
+                    <span>📅</span>
+                    <strong>Record Attendance</strong>
+                    <small>Mark student attendance</small>
+                </a>
+
+                <a href="/audit-logs" class="action-card">
+                    <span>🔍</span>
+                    <strong>Audit Logs</strong>
+                    <small>Review system activity</small>
+                </a>
+
+            {% elif current_user.role == 'teacher' %}
+
+                <a href="/students" class="action-card">
+                    <span>👨‍🎓</span>
+                    <strong>View Students</strong>
+                    <small>Access student list</small>
+                </a>
+
+                <a href="/courses" class="action-card">
+                    <span>📚</span>
+                    <strong>View Courses</strong>
+                    <small>Check available courses</small>
+                </a>
+
+                <a href="/enroll" class="action-card">
+                    <span>📋</span>
+                    <strong>Enroll Students</strong>
+                    <small>Assign students to courses</small>
+                </a>
+
+                <a href="/grades" class="action-card">
+                    <span>📝</span>
+                    <strong>Record Grades</strong>
+                    <small>Add or update grades</small>
+                </a>
+
+                <a href="/attendance" class="action-card">
+                    <span>📅</span>
+                    <strong>Record Attendance</strong>
+                    <small>Mark attendance</small>
+                </a>
+
+            {% else %}
+
+                <a href="/courses" class="action-card">
+                    <span>📚</span>
+                    <strong>View Courses</strong>
+                    <small>See available courses</small>
+                </a>
+
+                <a href="/grades" class="action-card">
+                    <span>📝</span>
+                    <strong>My Grades</strong>
+                    <small>View your own grades only</small>
+                </a>
+
+                <a href="/attendance" class="action-card">
+                    <span>📅</span>
+                    <strong>My Attendance</strong>
+                    <small>View your own attendance only</small>
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+    <!-- RBAC Explanation -->
+    <section class="dashboard-card full-width-card">
+        <h2>🎯 Your Access Level</h2>
+
+        {% if current_user.role == 'admin' %}
+            <p>
+                As an <strong>admin</strong>, you can manage all users, students,
+                courses, enrolments, grades, attendance records, and audit logs.
+            </p>
+
+        {% elif current_user.role == 'teacher' %}
+            <p>
+                As a <strong>teacher</strong>, you can view students and courses,
+                enrol students, and record grades and attendance. You cannot manage
+                user roles or view audit logs.
+            </p>
+
+        {% else %}
+            <p>
+                As a <strong>student</strong>, you can only view courses,
+                your own grades, and your own attendance records.
+            </p>
+        {% endif %}
     </section>
 
 </main>

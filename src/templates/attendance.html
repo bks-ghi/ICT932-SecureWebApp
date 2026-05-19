@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Attendance - SecureWebApp</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo">🔒 SecureWebApp</div>
+
+    <div class="nav-logo">
+        🔒 SecureWebApp
+    </div>
 
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
-        <a href="/students">👨‍🎓 Students</a>
         <a href="/courses">📚 Courses</a>
+        <a href="/grades">📝 Grades</a>
+        <a href="/attendance">📅 Attendance</a>
+
+        {% if current_user.role in ['admin', 'teacher'] %}
+            <a href="/students">👨‍🎓 Students</a>
+            <a href="/enroll">📋 Enroll</a>
+        {% endif %}
+
+        {% if current_user.role == 'admin' %}
+            <a href="/admin">👥 Admin Panel</a>
+            <a href="/audit-logs">🔍 Audit Logs</a>
+        {% endif %}
+
         <a href="/logout">Logout</a>
     </div>
+
 </nav>
 
 <main class="container">
@@ -25,30 +43,168 @@
         <h1>📅 Attendance</h1>
     </div>
 
+    {% if current_user.role in ['admin', 'teacher'] %}
+
+    <div class="form-card">
+
+        <h2>Record Student Attendance</h2>
+
+        <form method="POST" action="/attendance">
+
+            <label>Select Student</label>
+            <select name="student_id" required>
+                <option value="">-- Select Student --</option>
+
+                {% for student in students %}
+                    <option value="{{ student.id }}">
+                        {{ student.full_name }} - {{ student.student_id }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Select Course</label>
+            <select name="course_id" required>
+                <option value="">-- Select Course --</option>
+
+                {% for course in courses %}
+                    <option value="{{ course.id }}">
+                        {{ course.course_code }} - {{ course.course_name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label>Date</label>
+            <input type="date" name="date" required>
+
+            <label>Status</label>
+            <select name="status" required>
+                <option value="Present">Present</option>
+                <option value="Absent">Absent</option>
+                <option value="Late">Late</option>
+                <option value="Excused">Excused</option>
+            </select>
+
+            <button type="submit" class="btn">
+                Save Attendance
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
     <div class="table-card">
 
         <table>
+
             <thead>
                 <tr>
                     <th>Student</th>
+                    <th>Course</th>
                     <th>Date</th>
                     <th>Status</th>
+
+                    {% if current_user.role in ['admin', 'teacher'] %}
+                        <th>Modify</th>
+                        <th>Delete</th>
+                    {% endif %}
                 </tr>
             </thead>
 
             <tbody>
-                {% for attendance in attendance_records %}
+
+                {% for record in attendance %}
+
                 <tr>
-                    <td>{{ attendance.student }}</td>
-                    <td>{{ attendance.date }}</td>
-                    <td>{{ attendance.status }}</td>
+
+                    <td>
+                        {{ record.student.full_name if record.student else 'Unknown Student' }}
+                    </td>
+
+                    <td>
+                        {{ record.course.course_name if record.course else 'Unknown Course' }}
+                    </td>
+
+                    <td>
+                        {{ record.date }}
+                    </td>
+
+                    <td>
+                        {{ record.status }}
+                    </td>
+
+                    {% if current_user.role in ['admin', 'teacher'] %}
+
+                    <td>
+
+                        <form method="POST" action="/attendance/update/{{ record.id }}">
+
+                            <input
+                                type="date"
+                                name="date"
+                                value="{{ record.date }}"
+                                required
+                            >
+
+                            <select name="status" required>
+                                <option value="Present" {% if record.status == 'Present' %}selected{% endif %}>
+                                    Present
+                                </option>
+
+                                <option value="Absent" {% if record.status == 'Absent' %}selected{% endif %}>
+                                    Absent
+                                </option>
+
+                                <option value="Late" {% if record.status == 'Late' %}selected{% endif %}>
+                                    Late
+                                </option>
+
+                                <option value="Excused" {% if record.status == 'Excused' %}selected{% endif %}>
+                                    Excused
+                                </option>
+                            </select>
+
+                            <button type="submit" class="btn">
+                                Update
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                    <td>
+
+                        <form method="POST"
+                              action="/attendance/delete/{{ record.id }}"
+                              onsubmit="return confirm('Are you sure you want to delete this attendance record?');">
+
+                            <button type="submit" class="btn-danger">
+                                Delete
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                    {% endif %}
+
                 </tr>
+
                 {% else %}
+
                 <tr>
-                    <td colspan="3">No attendance records found.</td>
+                    {% if current_user.role in ['admin', 'teacher'] %}
+                        <td colspan="6">No attendance records found.</td>
+                    {% else %}
+                        <td colspan="4">No attendance records found.</td>
+                    {% endif %}
                 </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
 
     </div>
@@ -56,4 +212,5 @@
 </main>
 
 </body>
+
 </html>

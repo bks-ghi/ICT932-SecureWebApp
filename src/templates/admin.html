@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Panel - SecureWebApp</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo">🔒 SecureWebApp</div>
+
+    <div class="nav-logo">
+        🔒 SecureWebApp
+    </div>
 
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
@@ -21,6 +26,7 @@
         <a href="/audit-logs">🔍 Audit Logs</a>
         <a href="/logout">Logout</a>
     </div>
+
 </nav>
 
 <main class="container">
@@ -30,42 +36,124 @@
     </div>
 
     <div class="table-card">
+
         <table>
+
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Username</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Current Role</th>
                     <th>2FA</th>
+                    <th>Update Role</th>
+                    <th>Delete User</th>
                 </tr>
             </thead>
 
             <tbody>
+
                 {% for user in users %}
+
                 <tr>
+
                     <td>{{ user.id }}</td>
+
                     <td>{{ user.username }}</td>
+
                     <td>{{ user.email }}</td>
+
                     <td>
                         <span class="badge badge-{{ user.role }}">
                             {{ user.role }}
                         </span>
                     </td>
+
                     <td>
                         {{ '✅ Enabled' if user.is_2fa_enabled else '❌ Disabled' }}
                     </td>
+
+                    <td>
+
+                        {% if user.id == current_user.id %}
+
+                            <span>Current Admin Protected</span>
+
+                        {% else %}
+
+                            <form method="POST" action="/admin/update-role/{{ user.id }}">
+
+                                <select name="role">
+
+                                    <option value="student"
+                                        {% if user.role == 'student' %}selected{% endif %}>
+                                        Student
+                                    </option>
+
+                                    <option value="teacher"
+                                        {% if user.role == 'teacher' %}selected{% endif %}>
+                                        Teacher
+                                    </option>
+
+                                    <option value="admin"
+                                        {% if user.role == 'admin' %}selected{% endif %}>
+                                        Admin
+                                    </option>
+
+                                </select>
+
+                                <button type="submit" class="btn">
+                                    Update
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if user.id == current_user.id %}
+
+                            <span>Not Allowed</span>
+
+                        {% else %}
+
+                            <form method="POST"
+                                  action="/admin/delete-user/{{ user.id }}"
+                                  onsubmit="return confirm('Are you sure you want to delete this user?');">
+
+                                <button type="submit" class="btn-danger">
+                                    Delete
+                                </button>
+
+                            </form>
+
+                        {% endif %}
+
+                    </td>
+
                 </tr>
+
                 {% else %}
+
                 <tr>
-                    <td colspan="5">No users found.</td>
+                    <td colspan="7">
+                        No users found.
+                    </td>
                 </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
+
     </div>
 
 </main>
 
 </body>
+
 </html>

@@ -1,21 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Audit Logs - SecureWebApp</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-logo">🔒 SecureWebApp</div>
+
+    <div class="nav-logo">
+        🔒 SecureWebApp
+    </div>
 
     <div class="nav-links">
         <a href="/dashboard">Dashboard</a>
         <a href="/students">👨‍🎓 Students</a>
+        <a href="/courses">📚 Courses</a>
+        <a href="/enroll">📋 Enroll</a>
+        <a href="/grades">📝 Grades</a>
+        <a href="/attendance">📅 Attendance</a>
+        <a href="/admin">👥 Admin Panel</a>
         <a href="/logout">Logout</a>
     </div>
+
 </nav>
 
 <main class="container">
@@ -27,27 +38,64 @@
     <div class="table-card">
 
         <table>
+
             <thead>
                 <tr>
                     <th>Timestamp</th>
-                    <th>Event</th>
+                    <th>Event / Action</th>
                     <th>User</th>
+                    <th>IP Address</th>
                 </tr>
             </thead>
 
             <tbody>
+
                 {% for log in logs %}
+
                 <tr>
                     <td>{{ log.timestamp }}</td>
-                    <td>{{ log.event }}</td>
-                    <td>{{ log.user }}</td>
+
+                    <td>
+                        {% if log.display_event %}
+                            {{ log.display_event }}
+                        {% elif log.action %}
+                            {{ log.action }}
+                        {% elif log.event %}
+                            {{ log.event }}
+                        {% else %}
+                            No event recorded
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if log.display_user %}
+                            {{ log.display_user }}
+                        {% elif log.user %}
+                            {{ log.user.username }}
+                        {% elif log.user_id %}
+                            User ID: {{ log.user_id }}
+                        {% else %}
+                            System
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {{ log.ip_address if log.ip_address else 'N/A' }}
+                    </td>
                 </tr>
+
                 {% else %}
+
                 <tr>
-                    <td colspan="3">No audit logs found.</td>
+                    <td colspan="4">
+                        No audit logs found.
+                    </td>
                 </tr>
+
                 {% endfor %}
+
             </tbody>
+
         </table>
 
     </div>
@@ -55,4 +103,5 @@
 </main>
 
 </body>
+
 </html>
