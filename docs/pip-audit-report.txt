@@ -1,0 +1,26 @@
+﻿pip-audit Dependency Vulnerability Scan Report
+
+Project:
+ICT932 SecureWebApp - Project 9 Secure Student Management System
+
+Tool:
+pip-audit
+
+Command used:
+python -m pip_audit -r requirements.txt
+
+Initial finding:
+pip-audit found vulnerabilities in:
+- pillow 10.3.0
+- pytest 8.2.2
+
+Remediation performed:
+- Upgraded pillow from 10.3.0 to 12.2.0
+- Upgraded pytest from 8.2.2 to 9.0.3
+- Updated requirements.txt using pip freeze
+
+Final result:
+No known vulnerabilities found.
+
+Conclusion:
+The dependency vulnerability scan was completed successfully after remediation.
