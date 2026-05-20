@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student - Secure Student Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-logo">Secure Student Management System</div>
+    <div class="nav-links">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/students">Students</a>
+        <a href="/courses">Courses</a>
+        <a href="/enroll">Enroll</a>
+        <a href="/grades">Grades</a>
+        <a href="/attendance">Attendance</a>
+        <a href="/logout">Logout</a>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="form-card">
+        <h1>Edit Student</h1>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <label>Student ID</label>
+            <input type="text" name="student_id" value="{{ student.student_id }}" required>
+
+            <label>Full Name</label>
+            <input type="text" name="full_name" value="{{ student.full_name }}" required>
+
+            <label>Email</label>
+            <input type="email" name="email" value="{{ student.email }}" required>
+
+            <label>Phone</label>
+            <input type="text" name="phone" value="{{ student.phone }}">
+
+            <button type="submit" class="btn">Update Student</button>
+        </form>
+    </div>
+</main>
+
+</body>
+</html>
