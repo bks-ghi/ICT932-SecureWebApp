@@ -101,7 +101,7 @@
 
             <div class="info-row">
                 <strong>2FA Status:</strong>
-                <span>{{ '✅ Enabled' if current_user.is_2fa_enabled else '❌ Disabled' }}</span>
+                <span>{{ ' Enabled' if current_user.is_2fa_enabled else ' Disabled' }}</span>
             </div>
         </div>
 
@@ -109,12 +109,12 @@
             <h2>🛡️ Security Status</h2>
 
             <ul class="security-list">
-                <li>✅ Secure login enabled</li>
-                <li>✅ Password hashing active</li>
-                <li>✅ Two-Factor Authentication enabled</li>
-                <li>✅ Role-Based Access Control active</li>
-                <li>✅ Session management active</li>
-                <li>✅ Audit logging enabled</li>
+                <li> Secure login enabled</li>
+                <li> Password hashing active</li>
+                <li> Two-Factor Authentication enabled</li>
+                <li> Role-Based Access Control active</li>
+                <li> Session management active</li>
+                <li> Audit logging enabled</li>
             </ul>
         </div>
 
@@ -231,7 +231,7 @@
 
     <!-- RBAC Explanation -->
     <section class="dashboard-card full-width-card">
-        <h2>🎯 Your Access Level</h2>
+        <h2> Your Access Level</h2>
 
         {% if current_user.role == 'admin' %}
             <p>
