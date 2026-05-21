@@ -1,4 +1,4 @@
-# ICT932-SecureWebApp 🔐
+# Secure Student Management System 🔐
 
 Secure Flask web application with RBAC, 2FA, and CI/CD pipeline — built using DevSecOps principles.
 
