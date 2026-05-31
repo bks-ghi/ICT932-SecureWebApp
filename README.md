@@ -1,4 +1,3 @@
-```markdown
 # Secure Student Management System 🔐
 Secure Flask web application with RBAC, 2FA, and CI/CD pipeline — built using DevSecOps principles.
 
@@ -30,27 +29,24 @@ Secure Flask web application with RBAC, 2FA, and CI/CD pipeline — built using 
 ## ⚙️ Setup Instructions
 
 ### 1. Clone the repository
-```bash
-git clone https://github.com/bks-ghi/ICT932-SecureWebApp.git
-cd ICT932-SecureWebApp
-```
+
+    git clone https://github.com/bks-ghi/ICT932-SecureWebApp.git
+    cd ICT932-SecureWebApp
 
 ### 2. Create virtual environment
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
+
+    python -m venv venv
+    venv\Scripts\activate
 
 ### 3. Install dependencies
-```bash
-pip install -r requirements.txt
-```
+
+    pip install -r requirements.txt
 
 ### 4. Run the application
-```bash
-cd src
-python app.py
-```
+
+    cd src
+    python app.py
+
 Visit http://127.0.0.1:5000
 
 ## 🔒 Security Features
@@ -68,17 +64,15 @@ Visit http://127.0.0.1:5000
 | DAST | OWASP ZAP |
 
 ## 📁 Project Structure
-```
-ICT932-SecureWebApp/
-├── src/          # Flask source code
-├── tests/        # Unit tests
-├── docs/         # ZAP reports, Bandit report, screenshots
-├── .github/workflows/  # CI/CD pipeline
-└── README.md
-```
+
+    ICT932-SecureWebApp/
+    ├── src/                 # Flask source code
+    ├── tests/               # Unit tests
+    ├── docs/                # ZAP reports, Bandit report, screenshots
+    ├── .github/workflows/   # CI/CD pipeline
+    ├── requirements.txt     # Dependencies
+    └── README.md
 
 ## 🧪 Running Tests
-```bash
-python -m pytest tests/ -v
-```
-```
+
+    python -m pytest tests/ -v
